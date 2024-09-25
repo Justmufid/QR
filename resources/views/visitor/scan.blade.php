@@ -50,6 +50,7 @@
                 @endforeach
             </tbody>
         </table>
+        
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
@@ -86,34 +87,35 @@
                 return response.json();
             })
             .then(data => {
-    console.log('Response data:', data);
-    if (data.success) {
-        document.getElementById('visitor-info').insertAdjacentHTML('beforeend', `
-            <tr>
-                <td>${data.visitor.id_conference}</td>
-                <td>${data.visitor.name}</td>
-                <td>${data.visitor.email}</td>
-                <td>${data.visitor.affiliation}</td>
-                <td>${data.checkInTime.check_in_time}</td> <!-- Gunakan data check-in -->
-                <td>${data.checkInTime.room}</td> <!-- Gunakan data room -->
-            </tr>
-        `);
+                console.log('Response data:', data);
+                if (data.success) {
+                    document.getElementById('visitor-info').insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td>${data.visitor.id_conference}</td>
+                            <td>${data.visitor.name}</td>
+                            <td>${data.visitor.email}</td>
+                            <td>${data.visitor.affiliation}</td>
+                            <td>${data.visitor.check_in_time}</td>
+                            <td>Ruangan ${data.visitor.room}</td>
+                        </tr>
+                    `);
 
-        Swal.fire({
-            title: `Welcome Mr./Mrs. ${data.visitor.name}`,
-            text: `You have successfully checked in to Room ${data.checkInTime.room}.`,
-            icon: 'success',
-            timer: 2500,
-            showConfirmButton: false
-        });
-    } else {
-        alert('Check-in failed: ' + data.message);
-    }
+                    Swal.fire({
+                        title: `Welcome Mr./Mrs. ${data.visitor.name}`,
+                        text: `You have successfully checked in to Room ${data.visitor.room}.`,
+                        icon: 'success',
+                        timer: 2500, // Set timer to 2.5 seconds (2500 ms)
+                        showConfirmButton: false // Tidak menampilkan tombol OK
+                    });
+                } else {
+                    alert('Check-in failed: ' + data.message);
+                }
 
-    setTimeout(() => {
-        scanning = false;
-    }, 3000);
-})
+                // Tunggu 3 detik sebelum mengizinkan scan ulang
+                setTimeout(() => {
+                    scanning = false; // Izinkan scan lagi setelah 3 detik
+                }, 3000);
+            })
             .catch(err => {
                 console.error('Error:', err);
                 alert('An error occurred. Please try again.');

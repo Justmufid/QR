@@ -82,9 +82,9 @@ class VisitorController extends Controller
 
     public function showScanPage()
     {
-        $checkInTimes = CheckInTime::with('visitor')->whereDate('check_in_time', Carbon::today())->get();
+        $checkInTimes = CheckInTime::with('visitor')->get(); // Ambil semua data check-in
         return view('visitor.scan', compact('checkInTimes'));
-    }
+    }    
 
     public function checkIn(Request $request)
     {
