@@ -11,6 +11,10 @@
     </style>
 </head>
 <body>    
+
+@extends('layouts.app')
+
+@section('content')
     <div class="container mt-4">
         <h1>Scan QR Code</h1>
         <center>
@@ -137,5 +141,4 @@
             console.error('Unable to start QR code scanner', err);
         });
     </script>
-</body>
-</html>
+@endsection

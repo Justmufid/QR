@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Undangan Pengunjung</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <div class="container mt-4">
         <h1 class="mb-4">Undangan untuk {{ $visitor->name }}</h1>
 
@@ -15,7 +10,8 @@
                 <!-- Ucapan Pembuka -->
                 <p>Kepada Yth. {{ $visitor->name }}</p>
                 <p>Dengan hormat,</p>
-                <p>Kami dengan senang hati mengundang Anda untuk menghadiri acara kami yang akan datang. Berikut adalah detail undangan Anda:</p>
+                <p>Kami dengan senang hati mengundang Anda untuk menghadiri acara kami yang akan datang. Berikut adalah
+                    detail undangan Anda:</p>
 
                 <!-- Data Pengunjung -->
                 <hr>
@@ -38,17 +34,11 @@
         <!-- Tombol untuk Salin Link dan Unduh HTML -->
         <div class="mb-3">
             <a href="{{ route('visitor.index') }}" class="btn btn-secondary no-print">Kembali ke Daftar Pengunjung</a>
-            <a id="downloadPdfButton" href="{{ route('visitor.downloadPDF', $visitor->id) }}" class="btn btn-success no-print">Unduh PDF</a>
-            <a id="downloadButton" href="{{ route('visitor.downloadInvitation', $visitor->id) }}" class="btn btn-success no-print">Unduh HTML</a>
+            <a id="downloadPdfButton" href="{{ route('visitor.downloadPDF', $visitor->id) }}"
+                class="btn btn-success no-print">Unduh PDF</a>
+            <a id="downloadButton" href="{{ route('visitor.downloadInvitation', $visitor->id) }}"
+                class="btn btn-success no-print">Unduh HTML</a>
         </div>
 
     </div>
-
-    <!-- Bootstrap JavaScript (opsional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-</body>
-</html>
+@endsection
