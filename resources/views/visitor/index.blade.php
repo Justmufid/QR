@@ -11,7 +11,8 @@
         @endif
 
         <a href="{{ route('visitor.create') }}" class="btn btn-primary mb-3">Tambah Pengunjung</a>
-        <a href="{{ route('visitor.scan') }}" class="btn btn-success mb-3">Scan QR Code</a>
+        <a href="{{ route('visitor.download') }}" class="btn btn-primary mb-3">Download Data</a>
+        <a href="{{ route('visitor.scan') }}" class="btn btn-primary mb-3">Scan QR Code</a>
 
         <table class="table table-bordered">
             <thead>

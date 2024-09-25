@@ -4,6 +4,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Scan QR Code</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('LTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('LTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('LTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('LTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <style>
         video {
             transform: scaleX(-1);
@@ -16,7 +20,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1>Scan QR Code</h1>
+        <h1>Scan QR Code</h1>       
         <center>
             <div class="form-group">
                 <label for="room">Pilih Ruangan:</label>
@@ -41,7 +45,7 @@
                     <th>Room</th>
                 </tr>
             </thead>
-            <tbody id="visitor-info">
+            <tbody id="tabel-visitor">
                 @foreach($checkInTimes as $checkIn)
                     <tr>
                         <td>{{ $checkIn->visitor->id_conference }}</td>
@@ -53,8 +57,8 @@
                     </tr>
                 @endforeach
             </tbody>
+            
         </table>
-        
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>

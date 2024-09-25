@@ -26,7 +26,7 @@
                 <label for="affiliation">Affiliation:</label>
                 <input type="text" id="affiliation" name="affiliation" class="form-control" placeholder="Kampus/Kantor/PT">
             </div>
-
+            <p></p>
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
