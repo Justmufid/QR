@@ -33,7 +33,18 @@
             </div>
             <div id="qr-reader" style="width: 500px;"></div>
             <div id="qr-reader-results"></div>
+            <div class="form-group mt-4">
+                <h2>Manual Check-in</h2>
+                <label for="id">ID User:</label>
+                <input type="text" id="id" class="form-control" placeholder="Masukkan ID">
+    
+                <label for="name" class="mt-2">Name:</label>
+                <input type="text" id="name" class="form-control" placeholder="Masukkan Nama">
+    
+                <button id="manual-checkin" class="btn btn-primary mt-3">Check-in</button>
+            </div>
         </center>
+
         <table class="table table-bordered mt-4">
             <thead>
                 <tr>
@@ -72,7 +83,13 @@
             
             // Validasi jika ruangan belum dipilih
             if (!selectedRoom) {
-                alert('Silakan pilih ruangan sebelum melakukan check-in.');
+                Swal.fire({
+                    title: 'Ruangan belum dipilih',
+                    text: 'Silakan pilih ruangan sebelum melakukan check-in.',
+                    icon: 'warning',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
                 return;
             }
 
@@ -116,7 +133,13 @@
                         showConfirmButton: false // Tidak menampilkan tombol OK
                     });
                 } else {
-                    alert('Check-in failed: ' + data.message);
+                    Swal.fire({
+                        title: 'Check-in failed',
+                        text: data.message,
+                        icon: 'error',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
                 }
 
                 // Tunggu 3 detik sebelum mengizinkan scan ulang
@@ -126,7 +149,13 @@
             })
             .catch(err => {
                 console.error('Error:', err);
-                alert('An error occurred. Please try again.');
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred. Please try again.',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
 
                 // Tetap izinkan scan lagi setelah error, setelah 3 detik
                 setTimeout(() => {
@@ -143,6 +172,91 @@
             onScanSuccess
         ).catch(err => {
             console.error('Unable to start QR code scanner', err);
+        });
+
+        document.getElementById('manual-checkin').addEventListener('click', function() {
+            const idVisitor = document.getElementById('id').value;
+            const name = document.getElementById('name').value;
+            const selectedRoom = document.getElementById('room').value;
+
+            // Validasi ruangan dan input form
+            if (!selectedRoom) {
+                Swal.fire({
+                    title: 'Ruangan belum dipilih',
+                    text: 'Silakan pilih ruangan sebelum melakukan check-in.',
+                    icon: 'warning',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+                return;
+            }
+            
+            if (!idVisitor || !name) {
+                Swal.fire({
+                    title: 'Data belum lengkap',
+                    text: 'Silakan masukkan ID dan Nama.',
+                    icon: 'warning',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+                return;
+            }
+
+            fetch('/getForm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id: idVisitor,
+                    name: name,
+                    room: selectedRoom,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response Data:', data);
+                if (data.success) {
+                    document.getElementById('tabel-visitor').insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td>${data.visitor.id}</td>
+                            <td>${data.visitor.name}</td>
+                            <td>${data.visitor.email}</td>
+                            <td>${data.visitor.affiliation}</td>
+                            <td>${data.visitor.check_in_time}</td>
+                            <td>Ruangan ${data.visitor.room}</td>
+                        </tr>
+                    `);
+
+                    Swal.fire({
+                        title: `Welcome Mr./Mrs. ${data.visitor.name}`,
+                        text: `You have successfully checked in to Room ${data.visitor.room}.`,
+                        icon: 'success',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                } else {
+                    console.log('Error Message:', data.message);
+                    Swal.fire({
+                        title: 'Check-in failed',
+                        text: data.message,
+                        icon: 'error',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err); // Tambahkan ini untuk log kesalahan
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred. Please try again.',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            });
         });
     </script>
 @endsection
